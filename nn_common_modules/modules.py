@@ -419,11 +419,11 @@ class SDnetDecoderBlock(GenericBlock):
         :rtype: torch.tensor
         """
 
-        unpool = self.unpool(input, indices, out_block.shape)
         if out_block is not None:
+            unpool = self.unpool(input, indices, out_block.shape)
             concat = torch.cat((out_block, unpool), dim=1)
         else:
-            concat = unpool
+            concat = self.unpool(input, indices)
         out_block = super(SDnetDecoderBlock, self).forward(concat, weights)
         if self.SELayer:
             out_block = self.SELayer(out_block, weights)
